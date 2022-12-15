@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ProjectoIntento24.Core
 {
-    public class Expression
+    public class Expressions
     {
     }
 }

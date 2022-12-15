@@ -1,6 +1,7 @@
 ﻿using ProjectoIntento24.Core;
 using ProjectoIntento24.Lexer;
 using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 
 namespace ProjectoIntento24.Parser
@@ -15,15 +16,15 @@ namespace ProjectoIntento24.Parser
             this.Move();
         }
 
-        public void Parse()
+        public Statement Parse()
         {
-             Code();
+            return Code();
             Console.WriteLine("Parsing Complete");
         }
 
-        private void Code()
+        private Statement Code()
         {
-             Block();
+            return Block();
 
             Console.WriteLine("Out of Block");
         }
@@ -34,31 +35,31 @@ namespace ProjectoIntento24.Parser
             Stmts();
         }
 
-        private void Stmts()
+        private Statement Stmts()
         {
             if (this.lookAhead.TokenType == TokenType.EOF)
             {
-                //return null;
+                return null;
             }
             else
             {
                 if(this.lookAhead.TokenType == TokenType.RightKey)
                 {
                     Console.WriteLine("Out of loop");
-                    //return null;
+                    return null;
                 }   
                 else
                 {
                     Stmt();
                     Stmts();
-                    //return new SequenceStatement(Stmt(), Stmts()); ;
+                    return new SequenceStatement(Stmt(), Stmts()); ;
                 }
 
             }
             
         }
 
-        private void Stmt()
+        private Statement Stmt()
         {
             switch (this.lookAhead.TokenType)
             {
@@ -67,7 +68,7 @@ namespace ProjectoIntento24.Parser
                     break;
                 case TokenType.WhileKeyword:
                     Match(TokenType.WhileKeyword);
-                    //return WhileStatement();
+                    return WhileStatement();
                     break;
                 case TokenType.IfKeyword:
                     Match(TokenType.IfKeyword);
@@ -88,48 +89,44 @@ namespace ProjectoIntento24.Parser
             }
         }
 
-        private void PrintStmt()
+        private Statement PrintStmt()
         {
             Match(TokenType.ConsoleKeyword);
             Match(TokenType.Punto);
             Match(TokenType.LogKeyword);
             Match(TokenType.LeftParens);
-            //var expr = PrintParams();
+            var @params = PrintParams();
             PrintParams();
             Match(TokenType.RightParens);
             Match(TokenType.Semicolon);
-            //return new PrintStatement(expr);
+            return new PrintStatement(@params);
 
         }
 
-        private void PrintParams()
+        private Expressions PrintParams()
         {
+            var @params = new List<String>();
             if (this.lookAhead.TokenType == TokenType.ID)
             {
+                @params.Add(this.lookAhead.Lexeme.ToString());
                 Match(TokenType.ID);
                 if (this.lookAhead.TokenType == TokenType.Coma)
                 {
                     Match(TokenType.Coma);
-                    PrintParams();
+                    return PrintParams();
                 }
                 else if (this.lookAhead.TokenType == TokenType.LeftParens)
                 {
-                    FunctionExpr();
+                    return FunctionExpr();
                 }
             }
         }
-        private void FunctionExpr()
+        private Expressions FunctionExpr()
         {
             Match(TokenType.LeftParens);
-            PrintParams();
+            var expr = PrintParams();
             Match(TokenType.RightParens);
-        }
-
-        private void VarParams()
-        {
-
-            
-            
+            return expr;
         }
 
         private void ForStmt()
@@ -268,40 +265,40 @@ namespace ProjectoIntento24.Parser
             }
         }
 
-        private void WhileStatement()
+        private Statement WhileStatement()
         {
             Match(TokenType.LeftParens);
-            //var expr = ConditionExpr();
+            var expr = ConditionExpr();
             ConditionExpr();
             Match(TokenType.RightParens);
             Match(TokenType.LeftKey);
             Stmts();
             Match(TokenType.RightKey);
             Console.WriteLine("Sale del while");
-            //return new WhileStmt(expr, stmts);
+            return new WhileStmt(expr, stmts);
         }
 
-        private void AssignationStatement(IdExpr id)
+        private Statement AssignationStatement(IdExpr id)
         {
+            
             Match(TokenType.Equal);
             switch(this.lookAhead.TokenType)
             {
                 case TokenType.IntConstant:
                     Match(TokenType.IntConstant);
-                    ArithmeticExpr();
+                    var expr1 = ArithmeticExpr();
                     Match(TokenType.Semicolon);
-                    //return new AssignationStmt(id, expr);
-                    break;
+                    return new AssignationStmt(id, expr1);
                 case TokenType.ID:
                     Match(TokenType.ID);
-                    ArithmeticExpr();
+                    var expr = ArithmeticExpr();
                     Match(TokenType.Semicolon);
-                    //return new AssignationStmt(id, expr);
-                    break;
+                    return new AssignationStmt(id, expr);
+
             }
             
             Console.WriteLine("Asignado Correctamente");
-            //return null;
+            return null;
         }
 
         private void ArithmeticExprVar()
