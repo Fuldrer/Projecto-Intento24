@@ -8,3 +8,5 @@ function minus(a : number, b : number) : number {
  
 let a : number = 566;
 let b : number = 67;
+
+console.log(sum(a, b));

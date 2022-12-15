@@ -70,6 +70,9 @@ namespace ProjectoIntento24.Lexer
         NumberKeyword,
         BoolKeyword,
         StringKeyword,
-        FunctionKeyword
+        FunctionKeyword,
+        ConsoleKeyword,
+        Punto,
+        LogKeyword
     }
 }

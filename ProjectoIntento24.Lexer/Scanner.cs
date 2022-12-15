@@ -32,7 +32,9 @@ namespace ProjectoIntento24.Lexer
                 { "number", TokenType.NumberKeyword},
                 { "bool", TokenType.BoolKeyword},
                 { "string", TokenType.StringKeyword},
-                {"function", TokenType.FunctionKeyword }
+                { "function", TokenType.FunctionKeyword },
+                { "console", TokenType.ConsoleKeyword },
+                { "log", TokenType.LogKeyword }
             };
         }
         public Token GetNextToken()
@@ -513,6 +515,15 @@ namespace ProjectoIntento24.Lexer
                         return new Token
                         {
                             TokenType = TokenType.MOD,
+                            Column = input.Position.Column,
+                            Line = input.Position.Line,
+                            Lexeme = lexeme.ToString()
+                        };
+                    case '.':
+                        lexeme.Append(currentchar);
+                        return new Token
+                        {
+                            TokenType = TokenType.Punto,
                             Column = input.Position.Column,
                             Line = input.Position.Line,
                             Lexeme = lexeme.ToString()
