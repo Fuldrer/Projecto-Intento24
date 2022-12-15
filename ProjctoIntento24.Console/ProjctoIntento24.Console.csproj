@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ProjectoIntento24.Lexer\ProjectoIntento24.Lexer.csproj" />
+    <ProjectReference Include="..\ProjectoIntento24.Parser\ProjectoIntento24.Parser.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Code.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

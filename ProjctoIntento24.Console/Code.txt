@@ -1,0 +1,28 @@
+﻿let a : number = 5;
+let b : string = hola;
+
+var c : bool = true;
+const d : number;
+
+a = 5;
+
+function buenas(name : string): string;
+
+function translate(name1 : string, name2 : string): string;
+
+function minus(a : number, b : number) : number {
+     a = 5;
+}
+
+while(a > 5){
+
+}
+
+if(a >= 5){
+}
+else{
+b = 10;
+}
+
+for(let a = 1 ; a > 5){
+}
