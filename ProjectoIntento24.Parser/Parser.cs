@@ -158,13 +158,14 @@ namespace ProjectoIntento24.Parser
         {
             switch (this.lookAhead.TokenType)
             {
-                case TokenType.Plus: 
+                case TokenType.Plus:
                     ArithmeticExpr();
                     break;
                 case TokenType.Minus: 
                     ArithmeticExpr();
                     break;
-                case TokenType.Mult: ArithmeticExpr();
+                case TokenType.Mult:
+                    ArithmeticExpr();
                     break;
                 case TokenType.DIV:
                     ArithmeticExpr();
@@ -329,67 +330,116 @@ namespace ProjectoIntento24.Parser
                     {
                         
                         Match(TokenType.Equal);
-                        Match(TokenType.IntConstant);
+                        if(this.lookAhead.TokenType == TokenType.ID)
+                        {
+                            Match(TokenType.ID);
+                            Match(TokenType.Semicolon);
+                        }
+                        else
+                        {
+                            Match(TokenType.IntConstant);
+                            Match(TokenType.Semicolon);
+                        }
                     }
                     else
                     {
-                        Match(TokenType.IntConstant);
+                        if (this.lookAhead.TokenType == TokenType.ID)
+                        {
+                            Match(TokenType.ID);
+                            Match(TokenType.Semicolon);
+                        }
+                        else
+                        {
+                            Match(TokenType.IntConstant);
+                            Match(TokenType.Semicolon);
+                        }
                     }
                     break;
                 case TokenType.Minus:
                     Match(TokenType.Minus);
                     if (this.lookAhead.TokenType == TokenType.Equal)
                     {
+
                         Match(TokenType.Equal);
-                        if(this.lookAhead.TokenType == TokenType.IntConstant)
+                        if (this.lookAhead.TokenType == TokenType.ID)
+                        {
+                            Match(TokenType.ID);
+                            Match(TokenType.Semicolon);
+                        }
+                        else
                         {
                             Match(TokenType.IntConstant);
+                            Match(TokenType.Semicolon);
                         }
-                        Match(TokenType.ID);
                     }
                     else
                     {
-                        if (this.lookAhead.TokenType == TokenType.IntConstant)
+                        if (this.lookAhead.TokenType == TokenType.ID)
+                        {
+                            Match(TokenType.ID);
+                            Match(TokenType.Semicolon);
+                        }
+                        else
                         {
                             Match(TokenType.IntConstant);
+                            Match(TokenType.Semicolon);
                         }
-                        Match(TokenType.ID);
                     }
                     break;
                 case TokenType.Mult:
                     Match(TokenType.Mult);
                     if (this.lookAhead.TokenType == TokenType.Equal)
                     {
+
                         Match(TokenType.Equal);
-                        Match(TokenType.IntConstant);
+                        if (this.lookAhead.TokenType == TokenType.ID)
+                        {
+                            Match(TokenType.ID);
+                        }
+                        else
+                        {
+                            Match(TokenType.IntConstant);
+                        }
+
                     }
                     else
                     {
-                        Match(TokenType.IntConstant);
-                    }
-                    break;
-                case TokenType.DIV:
-                    Match(TokenType.DIV);
-                    if (this.lookAhead.TokenType == TokenType.Equal)
-                    {
-                        Match(TokenType.Equal);
-                        Match(TokenType.IntConstant);
-                    }
-                    else
-                    {
-                        Match(TokenType.IntConstant);
+                        if (this.lookAhead.TokenType == TokenType.ID)
+                        {
+                            Match(TokenType.ID);
+                        }
+                        else
+                        {
+                            Match(TokenType.IntConstant);
+                        }
                     }
                     break;
                 case TokenType.MOD:
                     Match(TokenType.MOD);
                     if (this.lookAhead.TokenType == TokenType.Equal)
                     {
+
                         Match(TokenType.Equal);
-                        Match(TokenType.IntConstant);
+                        if (this.lookAhead.TokenType == TokenType.ID)
+                        {
+                            Match(TokenType.ID);
+                        }
+                        else
+                        {
+                            Match(TokenType.IntConstant);
+                        }
+
                     }
                     else
                     {
-                        Match(TokenType.IntConstant);
+                        if (this.lookAhead.TokenType == TokenType.ID)
+                        {
+                            Match(TokenType.ID);
+                        }
+                        else
+                        {
+                            Match(TokenType.IntConstant);
+                        }
                     }
                     break;
                 case TokenType.Elevate:
@@ -453,10 +503,7 @@ namespace ProjectoIntento24.Parser
             if(this.lookAhead.TokenType == TokenType.LeftKey)
             {
                 Match(TokenType.LeftKey);
-
-                Console.WriteLine(this.lookAhead.TokenType.ToString());
                 Stmts();
-                Console.WriteLine(this.lookAhead.TokenType.ToString());
                 Match(TokenType.RightKey);
             }
             else

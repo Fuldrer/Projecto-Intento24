@@ -1,28 +1,10 @@
-﻿let a : number = 5;
-let b : string = hola;
-
-var c : bool = true;
-const d : number;
-
-a = 5;
-
-function buenas(name : string): string;
-
-function translate(name1 : string, name2 : string): string;
-
+﻿function sum(a : number, b : number) : number {
+     a + b;
+}
+ 
 function minus(a : number, b : number) : number {
-     a = 5;
+     a - b;
 }
-
-while(a > 5){
-
-}
-
-if(a >= 5){
-}
-else{
-b = 10;
-}
-
-for(let a = 1 ; a > 5){
-}
+ 
+let a : number = 566;
+let b : number = 67;
