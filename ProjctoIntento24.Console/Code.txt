@@ -1,12 +1,22 @@
 ﻿function sum(a : number, b : number) : number {
-     a + b;
+    return a + b;
 }
  
 function minus(a : number, b : number) : number {
-     a - b;
+    return a - b;
+}
+ 
+function div(a : number, b : number) : number {
+    return a / b;
+}
+ 
+function mult(a : number, b : number) : number {
+    return a * b;
 }
  
 let a : number = 566;
 let b : number = 67;
-
 console.log(sum(a, b));
+console.log(minus(a, b));
+console.log(div(a, b));
+console.log(mult(a, b));

@@ -95,7 +95,7 @@ namespace ProjectoIntento24.Lexer
                         lexeme.Append(currentchar);
                         currentchar = PeekNextChar();
                     }
-                    return lexeme.ToToken(input, TokenType.FloatConstant);
+                    return lexeme.ToToken(input, TokenType.IntConstant);
                 }
                 switch (currentchar)
                 {

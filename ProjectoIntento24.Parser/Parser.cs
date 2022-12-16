@@ -49,6 +49,11 @@ namespace ProjectoIntento24.Parser
                 }   
                 else
                 {
+                    if(this.lookAhead.TokenType == TokenType.ReturnKeyword)
+                    {
+                        Match(TokenType.ReturnKeyword);
+
+                    }    
                     Stmt();
                     Stmts();
                     //return new SequenceStatement(Stmt(), Stmts()); ;
@@ -81,6 +86,14 @@ namespace ProjectoIntento24.Parser
                     PrintStmt();
                     break;
                 case TokenType.RightKey:
+                    break;
+                case TokenType.TrueKeyword:
+                    Match(TokenType.TrueKeyword);
+                    Match(TokenType.Semicolon);
+                    break;
+                case TokenType.FalseKeyword:
+                    Match(TokenType.FalseKeyword);
+                    Match(TokenType.Semicolon);
                     break;
                 default:
                     Block();
@@ -116,6 +129,23 @@ namespace ProjectoIntento24.Parser
                 {
                     FunctionExpr();
                 }
+                else if(this.lookAhead.TokenType == TokenType.Plus || this.lookAhead.TokenType == TokenType.Minus || this.lookAhead.TokenType == TokenType.Mult
+                    || this.lookAhead.TokenType == TokenType.DIV || this.lookAhead.TokenType == TokenType.Elevate ||
+                    this.lookAhead.TokenType == TokenType.LessThan || this.lookAhead.TokenType == TokenType.GreaterThan ||
+                    this.lookAhead.TokenType == TokenType.LessOrEqual || this.lookAhead.TokenType == TokenType.GreaterorEqual)
+                {
+                    ArithmeticExprVar();
+
+                }
+            }
+            else if(this.lookAhead.TokenType == TokenType.IntConstant)
+            {
+                Match(TokenType.IntConstant);
+                if (this.lookAhead.TokenType == TokenType.Coma)
+                {
+                    Match(TokenType.Coma);
+                    PrintParams();
+                }
             }
         }
         private void FunctionExpr()
@@ -145,7 +175,7 @@ namespace ProjectoIntento24.Parser
                         Match(TokenType.LetKeyword);
                         IdExpr id = new IdExpr(this.lookAhead.Lexeme, type: null);
                         Match(TokenType.ID);
-                        AssignationStatement(id);
+                        AssignationStatement();
                         Match(TokenType.ID);
                         LogicOP();
                         if(this.lookAhead.TokenType == TokenType.IntConstant)
@@ -156,6 +186,8 @@ namespace ProjectoIntento24.Parser
                         {
                             Match(TokenType.ID);
                         }
+                        Match(TokenType.Semicolon);
+                        IncrDecrStmt();
                         Match(TokenType.RightParens);
                         Match(TokenType.LeftKey);
                         Stmts();
@@ -183,6 +215,34 @@ namespace ProjectoIntento24.Parser
                         Match(TokenType.RightParens);
                         break;
                 }
+            }
+        }
+
+        private void IncrDecrStmt()
+        {
+            if(this.lookAhead.TokenType == TokenType.INCR)
+            {
+                Match(TokenType.INCR);
+                Match(TokenType.ID);
+            }
+            else if(this.lookAhead.TokenType == TokenType.ID)
+            {
+                Match(TokenType.ID);
+                if(this.lookAhead.TokenType == TokenType.INCR)
+                {
+                    Match(TokenType.INCR);
+                    
+                }
+                else
+                {
+                    Match(TokenType.DECR);
+
+                }
+            }
+            else if(this.lookAhead.TokenType == TokenType.DECR)
+            {
+                Match(TokenType.DECR);
+                Match(TokenType.ID);
             }
         }
 
@@ -224,7 +284,7 @@ namespace ProjectoIntento24.Parser
                     ArithmeticExpr();
                     break;
                 case TokenType.Equal:
-                    AssignationStatement(id);
+                    AssignationStatement();
                     break;
             }
         }
@@ -281,7 +341,7 @@ namespace ProjectoIntento24.Parser
             //return new WhileStmt(expr, stmts);
         }
 
-        private void AssignationStatement(IdExpr id)
+        private void AssignationStatement()
         {
             Match(TokenType.Equal);
             switch(this.lookAhead.TokenType)
@@ -295,13 +355,23 @@ namespace ProjectoIntento24.Parser
                 case TokenType.ID:
                     Match(TokenType.ID);
                     ArithmeticExpr();
-                    Match(TokenType.Semicolon);
-                    //return new AssignationStmt(id, expr);
+                    break;
+                //Match(TokenType.Semicolon);
+                //return new AssignationStmt(id, expr);
+                case TokenType.LeftBracket:
+                    ArrayStmt();
                     break;
             }
             
             Console.WriteLine("Asignado Correctamente");
             //return null;
+        }
+
+        private void ArrayStmt()
+        {
+            Match(TokenType.LeftBracket);
+            PrintParams();
+            Match(TokenType.RightBracket);
         }
 
         private void ArithmeticExprVar()
@@ -355,7 +425,7 @@ namespace ProjectoIntento24.Parser
                     Match(TokenType.DIV);
                     if (this.lookAhead.TokenType == TokenType.Equal)
                     {
-                        Match(TokenType.Equal);
+                        Match(TokenType.DivEqual);
                         Match(TokenType.ID);
                     }
                     else
@@ -376,6 +446,48 @@ namespace ProjectoIntento24.Parser
                     }
                     break;
                 case TokenType.Elevate:
+                    Match(TokenType.Elevate);
+                    if (this.lookAhead.TokenType == TokenType.Equal)
+                    {
+                        Match(TokenType.Equal);
+                        Match(TokenType.ID);
+                    }
+                    else
+                    {
+                        Match(TokenType.ID);
+                    }
+                    break;
+                case TokenType.GreaterThan:
+                    Match(TokenType.GreaterThan);
+                    if (this.lookAhead.TokenType == TokenType.Equal)
+                    {
+                        Match(TokenType.Equal);
+                        Match(TokenType.ID);
+                    }
+                    else
+                    {
+                        Match(TokenType.ID);
+                    }
+                    break;
+                case TokenType.LessThan: 
+                    Match(TokenType.LessThan);
+                    if (this.lookAhead.TokenType == TokenType.Equal)
+                    {
+                        Match(TokenType.Equal);
+                        Match(TokenType.ID);
+                    }
+                    else
+                    {
+                        Match(TokenType.ID);
+                    }
+                    break;
+                case TokenType.LessOrEqual: 
+                    Match(TokenType.LessOrEqual);
+                    Match(TokenType.ID);
+                    break;
+                case TokenType.GreaterorEqual: 
+                    Match(TokenType.GreaterorEqual);
+                    Match(TokenType.ID);
                     break;
                 default: break;
             }
@@ -456,10 +568,12 @@ namespace ProjectoIntento24.Parser
                         if (this.lookAhead.TokenType == TokenType.ID)
                         {
                             Match(TokenType.ID);
+                            Match(TokenType.Semicolon);
                         }
                         else
                         {
                             Match(TokenType.IntConstant);
+                            Match(TokenType.Semicolon);
                         }
 
                     }
@@ -468,10 +582,12 @@ namespace ProjectoIntento24.Parser
                         if (this.lookAhead.TokenType == TokenType.ID)
                         {
                             Match(TokenType.ID);
+                            Match(TokenType.Semicolon);
                         }
                         else
                         {
                             Match(TokenType.IntConstant);
+                            Match(TokenType.Semicolon);
                         }
                     }
                     break;
@@ -484,10 +600,12 @@ namespace ProjectoIntento24.Parser
                         if (this.lookAhead.TokenType == TokenType.ID)
                         {
                             Match(TokenType.ID);
+                            Match(TokenType.Semicolon);
                         }
                         else
                         {
                             Match(TokenType.IntConstant);
+                            Match(TokenType.Semicolon);
                         }
 
                     }
@@ -496,14 +614,78 @@ namespace ProjectoIntento24.Parser
                         if (this.lookAhead.TokenType == TokenType.ID)
                         {
                             Match(TokenType.ID);
+                            Match(TokenType.Semicolon);
                         }
                         else
                         {
                             Match(TokenType.IntConstant);
+                            Match(TokenType.Semicolon);
                         }
                     }
                     break;
                 case TokenType.Elevate:
+                    Match(TokenType.Elevate);
+                    if (this.lookAhead.TokenType == TokenType.Equal)
+                    {
+
+                        Match(TokenType.Equal);
+                        if (this.lookAhead.TokenType == TokenType.ID)
+                        {
+                            Match(TokenType.ID);
+                            Match(TokenType.Semicolon);
+                        }
+                        else
+                        {
+                            Match(TokenType.IntConstant);
+                            Match(TokenType.Semicolon);
+                        }
+
+                    }
+                    else
+                    {
+                        if (this.lookAhead.TokenType == TokenType.ID)
+                        {
+                            Match(TokenType.ID);
+                            Match(TokenType.Semicolon);
+                        }
+                        else
+                        {
+                            Match(TokenType.IntConstant);
+                            Match(TokenType.Semicolon);
+                        }
+                    }
+                    break;
+                case TokenType.DIV:
+                    Match(TokenType.DIV);
+                    if (this.lookAhead.TokenType == TokenType.Equal)
+                    {
+
+                        Match(TokenType.Equal);
+                        if (this.lookAhead.TokenType == TokenType.ID)
+                        {
+                            Match(TokenType.ID);
+                            Match(TokenType.Semicolon);
+                        }
+                        else
+                        {
+                            Match(TokenType.IntConstant);
+                            Match(TokenType.Semicolon);
+                        }
+
+                    }
+                    else
+                    {
+                        if (this.lookAhead.TokenType == TokenType.ID)
+                        {
+                            Match(TokenType.ID);
+                            Match(TokenType.Semicolon);
+                        }
+                        else
+                        {
+                            Match(TokenType.IntConstant);
+                            Match(TokenType.Semicolon);
+                        }
+                    }
                     break;
                 default: break;
             }
@@ -598,7 +780,14 @@ namespace ProjectoIntento24.Parser
                     if(this.lookAhead.TokenType == TokenType.Equal)
                     {
                         Match(TokenType.Equal);
-                        Match(TokenType.IntConstant);
+                        if(this.lookAhead.TokenType == TokenType.LeftBracket)
+                        {
+                            ArrayStmt();
+                        }
+                        else
+                        {
+                            Match(TokenType.IntConstant);
+                        }
                     }
                     break;
                 case TokenType.StringKeyword:
